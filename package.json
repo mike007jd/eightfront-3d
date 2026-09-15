@@ -1,0 +1,22 @@
+{
+  "name": "eightfront-3d",
+  "version": "0.15.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Offline Three.js eight-stage fan game with original GPU-skinned commandos, local co-op and optional retro input.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mike007jd/eightfront-3d.git"
+  },
+  "homepage": "https://github.com/mike007jd/eightfront-3d",
+  "bugs": {
+    "url": "https://github.com/mike007jd/eightfront-3d/issues"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

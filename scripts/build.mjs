@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),read=f=>fs.readFileSync(path.join(root,'src',f),'utf8');
+const {default: bundled}=await import('./bundle-three.mjs');
+const library='<script id="threeEmbedded">\n'+bundled.replace(/<\/script/gi,'<\\/script')+'\n</script>';
+const order=['geometry.js','biome-geometry.js','shaders.js','renderer-common.js','characters.js','renderer-three.js'];
+let js="window.__SOURCE_HTML__='<!DOCTYPE html>\\n'+document.documentElement.outerHTML;\nlet R;\n"+order.map(read).join('\n');
+js+='\nasync function bootGame(){R=createRenderFacade(createThreeBackend(await loadThree()));\n'+['stages.js','game.js','environment.js','art-original.js','audio.js','combat-art.js','environment-assets.js','biome-assets.js','world.js','stage-previews.js','guidance.js','guidance-ui.js','app.js'].map(read).join('\n')+'\n}\n';
+js+='bootGame().catch(err=>{window.__BOOT_STATUS__={state:"error",message:err.message};console.error(err);document.getElementById("loading").hidden=false;document.getElementById("loadMessage").textContent=err.message;document.getElementById("retry").hidden=false;});';
+const html=read('shell.html').replace('<!--SCRIPTS-->',()=>library+'\n<script>\n'+js.replace(/<\/script/gi,'<\\/script')+'\n</script>');
+fs.mkdirSync(path.join(root,'dist'),{recursive:true});
+fs.writeFileSync(path.join(root,'dist','index.html'),html);
+console.log('index.html',Buffer.byteLength(html),'bytes');
