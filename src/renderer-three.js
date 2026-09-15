@@ -3,9 +3,9 @@
  * Values are conservative defaults, NOT a promise of FPS on untested hardware.
  */
 const RenderProfiles=Object.freeze({
- low:Object.freeze({name:'流畅',shadow:0,aoSamples:0,volumeSteps:0,bloomMips:0,localLights:4,distortion:0}),
- high:Object.freeze({name:'高画质',shadow:1536,aoSamples:8,volumeSteps:8,bloomMips:3,localLights:8,distortion:1}),
- ultra:Object.freeze({name:'电影级',shadow:2048,aoSamples:12,volumeSteps:12,bloomMips:4,localLights:8,distortion:1})
+ low:Object.freeze({shadow:0,aoSamples:0,volumeSteps:0,bloomMips:0,localLights:4,distortion:0}),
+ high:Object.freeze({shadow:1536,aoSamples:8,volumeSteps:8,bloomMips:3,localLights:8,distortion:1}),
+ ultra:Object.freeze({shadow:2048,aoSamples:12,volumeSteps:12,bloomMips:4,localLights:8,distortion:1})
 });
 
 /* Production backend: Three.js r179 WebGL2, original forward HDR pipeline.

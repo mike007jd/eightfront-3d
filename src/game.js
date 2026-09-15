@@ -93,7 +93,7 @@ class CampaignGame{
   this.checkpoint={...p};this.furthest=this.stage.mode==='vertical'?p.y:p.x;this.cam=this.stage.mode==='depth'?0:this.stage.mode==='vertical'?0:13;this.camY=0;
   this.capsules=this.stage.capsules.map(c=>({...c,id:this.nextId++,baseY:c.y}));this.hazards=this.stage.hazards.map(h=>({...h}));
   this.mode='playing';if(this.stage.mode==='depth')this.enterRoom(0);
-  this.stageEntry=this.snapshot();this.callbacks.stage?.(this.stage);this.announce(this.stage.cn+' / '+this.stage.subtitle,4);this.log('stage-start',{practice});if(!this.practice)this.callbacks.save?.(this.snapshot());
+  this.stageEntry=this.snapshot();this.callbacks.stage?.(this.stage);this.announce(t('stages')[this.stageIndex]+' / '+this.stage.subtitle,4);this.log('stage-start',{practice});if(!this.practice)this.callbacks.save?.(this.snapshot());
  }
  snapshot(){const pack=p=>({id:p.id,weapon:p.weapon,reserve:p.reserve,lives:clamp(p.lives,0,7)});return{version:2,stage:this.stageIndex,difficulty:this.difficulty,inputMode:this.inputMode,playerCount:this.playerCount,players:this.players.map(pack),weapon:this.player?.weapon||'R',reserve:this.player?.reserve||null,lives:clamp(this.player?.lives??4,0,7),score:this.score,totalTime:this.totalTime,kills:this.kills,deaths:this.deaths,history:this.history.map(h=>({...h}))};}
  livingPlayers(){return this.players.filter(p=>!p.dead&&p.lives>0);}
@@ -135,7 +135,7 @@ class CampaignGame{
    this.particles.push({x,y,z,age:0,life:material==='metal'?.18+this.random()*.19:.30+this.random()*.30,vx:Math.cos(a)*v,vy:Math.sin(a)*v+1.2,vz:(this.random()-.5)*1.8,size:material==='metal'?.036+this.random()*.035:.07+this.random()*.07,color:colors[i%2],kind:material==='metal'?'spark':material==='stone'?'dust':'debris',surface:material});
   }
  }
- equip(type,p=this.player){if(!WEAPONS[type]||!p||p.dead)return;if(p.weapon===type){this.score+=200;if(this.difficulty==='arcade')p.hp=Math.min(p.maxHp,p.hp+1);}else{p.reserve=p.weapon;p.weapon=type;}this.announce((p.id===2?'P2 · ':'')+WEAPONS[type].name,1.2);this.sound('pickup');this.log('weapon-collected',{type,player:p.id});}
+ equip(type,p=this.player){if(!WEAPONS[type]||!p||p.dead)return;if(p.weapon===type){this.score+=200;if(this.difficulty==='arcade')p.hp=Math.min(p.maxHp,p.hp+1);}else{p.reserve=p.weapon;p.weapon=type;}this.announce((p.id===2?'P2 · ':'')+t('weapons')[type],1.2);this.sound('pickup');this.log('weapon-collected',{type,player:p.id});}
  swap(p=this.player){if(!p?.reserve)return;[p.weapon,p.reserve]=[p.reserve,p.weapon];p.shootCD=Math.min(p.shootCD,.1);this.sound('swap');}
  // Translate rear-wall X to the player's horizontal screen column. Perspective rooms
  // must not ask players to align unequal world X coordinates which look misaligned.
@@ -213,7 +213,7 @@ class CampaignGame{
   Object.assign(p,{...spawn,vx:0,vy:0,vz:0,dead:false,hp:p.maxHp,inv:3,grounded:true,airTime:0,jumpBuffer:0,coyote:.105,lastJump:false,lastFire:false,shootCD:0,deathDelay:0,dropTimer:0,shock:0,barrierContact:false,weapon:this.stage.mode==='depth'?'R':this.inputMode==='retro'?'R':this.boss?.active?'S':'R',reserve:null,grenades:Math.max(1,p.grenades)});
   if(this.playerCount===1||!partner){this.enemies=this.enemies.filter(e=>Math.hypot(e.x-p.x,e.y-p.y,e.z-p.z)>12);this.bullets=[];if(this.stage.mode==='vertical')this.camY=Math.max(0,p.y-2);else if(this.stage.mode==='side')this.cam=clamp(p.x+5,13,this.stage.length-7);}
   if(this.stage.mode==='depth')p.z=partner?Math.max(-8,partner.z):0;
-  this.announce('P'+p.id+' REINSERTED / '+p.lives+' LIVES',2);this.log('respawn',{player:p.id});
+  this.announce(t('reinserted',p.id),2);this.log('respawn',{player:p.id});
  }
  hitEnemy(e,damage,contact=null){if(e.dead)return;e.hp-=damage;e.hit=.1;this.impact(...(contact||[e.x,e.y+(e.type==='drone'?0:.95),e.z]),['runner','rifle'].includes(e.type)?'flesh':['pod','alienHead','crawler','alien'].includes(e.type)?'organic':'metal',4);if(e.hp<=0){e.dead=true;this.kills++;this.combo=this.t<this.comboUntil?this.combo+1:1;this.comboUntil=this.t+2.8;this.score+=(['tank','alienHead'].includes(e.type)?900:['turret','heavy','cart'].includes(e.type)?350:150)*Math.min(3,1+Math.floor(this.combo/5));this.log('enemy-killed',{type:e.type});if(e.carrier){this.pickups.push({id:this.nextId++,x:e.x,y:1.4,z:e.z,vy:2,vz:7.5,age:0,type:e.carrier});this.log('carrier-drop',{weapon:e.carrier});}if(['runner','rifle','heavy'].includes(e.type)){this.impact(e.x,e.y+.8,e.z,'flesh',9);this.impact(e.x,e.y+.10,e.z,'stone',5);this.sound('hit');}
  else if(['crawler','alien','pod','alienHead'].includes(e.type)){this.impact(e.x,e.y+.65,e.z,'organic',16);this.particles.push({x:e.x,y:e.y+.7,z:e.z,age:0,life:.65,vx:0,vy:.5,vz:0,size:.5,color:'#56484d',kind:'smoke'});this.sound('explode');}
@@ -263,7 +263,7 @@ class CampaignGame{
  }
  targetOpen(q){return this.targetState(q)==='open';}
  hitBoss(q,damage,contact=null,projectile=null){const b=this.boss;if(!this.targetOpen(q)){this.callbacks.contact?.({kind:'boss',outcome:this.targetState(q),target:q,projectile,point:contact,amount:0},this);this.impact(...(contact||[q.x,q.y,q.z]),'metal',3);return false;}const before=q.hp;q.hp=Math.max(0,q.hp-damage);this.callbacks.contact?.({kind:'boss',outcome:'damage',target:q,projectile,point:contact,amount:before-q.hp},this);b.hit=.08;this.impact(...(contact||[q.x,q.y,q.z]),b.type===7?'organic':b.type===2?'stone':'metal',5);if(q.hp===0){this.score+=q.kind==='core'?2200:700;this.explosion(q.x,q.y,q.z,true);this.log('boss-part-destroyed',{part:q.id});}
-  const cores=b.targets.filter(t=>t.kind==='core');if(cores.every(t=>t.hp<=0)){b.dead=true;b.deathTime=0;this.enemies=[];this.bullets=this.bullets.filter(t=>!t.enemy);this.score+=5000;this.shake=.4;this.flash=.7;this.log('boss-destroyed');}else if(!b.targets.some(t=>t.kind!=='core'&&t.hp>0)&&b.phase===1){b.phase=2;this.announce(cores.some(q=>this.targetOpen(q))?'核心暴露 / ATTACK THE CORE':'部件已破坏 · 等待核心开启',2.3);}return true;
+  const cores=b.targets.filter(t=>t.kind==='core');if(cores.every(t=>t.hp<=0)){b.dead=true;b.deathTime=0;this.enemies=[];this.bullets=this.bullets.filter(t=>!t.enemy);this.score+=5000;this.shake=.4;this.flash=.7;this.log('boss-destroyed');}else if(!b.targets.some(t=>t.kind!=='core'&&t.hp>0)&&b.phase===1){b.phase=2;this.announce(cores.some(q=>this.targetOpen(q))?t('coreExposed'):t('partsDown'),2.3);}return true;
  }
  enemySalvo(origin,target,speed,count=1,spread=.17,kind='enemy'){const d=target.map((v,i)=>v-origin[i]),len=Math.hypot(...d)||1,v=d.map(v=>v/len);for(let i=0;i<count;i++){const a=(i-(count-1)/2)*spread;let vx,vy,vz;if(this.stage.mode==='depth'){const yaw=Math.atan2(v[0],v[2])+a;vx=Math.sin(yaw)*Math.hypot(v[0],v[2]);vy=v[1];vz=Math.cos(yaw)*Math.hypot(v[0],v[2]);}else{const ang=Math.atan2(v[1],v[0])+a;vx=Math.cos(ang);vy=Math.sin(ang);vz=0;}this.projectile({x:origin[0],y:origin[1],z:origin[2],vx:vx*speed,vy:vy*speed,vz:vz*speed,enemy:true,r:kind==='disc'?.27:.15,life:6,type:kind,color:kind==='disc'?'#ffd899':'#ff777b'});}}
  updateBoss(dt){const b=this.boss;if(!b?.active)return;b.t+=dt;b.hit=Math.max(0,b.hit-dt);
@@ -275,7 +275,6 @@ class CampaignGame{
    const dx=Math.sin(b.t*(engines===2?.55:.85))*(engines===2?4:6);
    b.bank=engines===1?(b.targets[0].hp>0?-.16:.16):Math.sin(b.t*.85)*.08;
    for(const q of b.targets){q.x=q.baseX+dx;q.y=q.baseY+Math.sin(b.t*(engines===2?1.3:2.1))*(engines===2?.5:1.0)+(q.baseX-pt.x)*b.bank;}
-   b.hint=engines?'BREAK ENGINES / 引擎损坏会改变航线':'HULL OPEN / 躲开俯冲弹幕';
   }
   if(k===5){const q=b.targets[0],cycle=b.t%6.4,lap=Math.floor(b.t/6.4);
    if(b.robotLap!==lap){b.robotLap=lap;b.robotFrom=q.x;b.robotTo=clamp(p.x,pt.x-17,pt.x-5);b.slamFired=false;}
@@ -286,12 +285,9 @@ class CampaignGame{
    else if(cycle<4.7){const u=(cycle-3.1)/1.6;q.x=b.robotTo+(pt.x-5-b.robotTo)*u;}
    q.y=q.baseY+(b.robotState==='leap'?Math.sin((cycle-3.1)/1.6*Math.PI)*4.0:0);
    if(cycle>=4.7&&!b.slamFired){b.slamFired=true;for(const dir of [-1,1])this.projectile({x:q.x,y:.36,z:0,vx:dir*9,vy:0,r:.26,life:3,enemy:true,type:'shockwave',color:'#ff986a'});this.shake=.23;this.sound('slam');this.log('robot-slam');}
-   b.hint=b.robotState==='windup'?'WIND-UP / 准备闪避':b.robotState==='rush'?'RUSH / 跳过冲撞':b.robotState==='leap'?'SLAM INCOMING / 落地前起跳':'RECOVERING / 攻击窗口';
    for(const a of this.livingPlayers())if(Math.abs(a.x-q.x)<1.15&&a.y<q.y+1.3&&a.y+(a.duck?.6:1.65)>q.y-2.1)this.damagePlayer(false,a);
   }
-  if(k===6)b.hint='BREAK LOCKS / 留意滚轮与压机';
-  if(k===7){b.hint=b.phase===1?'BURST THE SACS / 孢囊正在孵化':this.targetOpen(b.targets.at(-1))?'HEART EXPOSED / 清场并攻击':'HEART SEALED / 躲避酸液';
-   if(b.acidPatch){b.acidPatch.age+=dt;const a=b.acidPatch;if(a.age>.9&&a.age<3.3)for(const u of this.livingPlayers())if(Math.abs(u.x-a.x)<1.5&&u.y<.5)this.damagePlayer(false,u);if(a.age>=3.3)b.acidPatch=null;}
+  if(k===7){if(b.acidPatch){b.acidPatch.age+=dt;const a=b.acidPatch;if(a.age>.9&&a.age<3.3)for(const u of this.livingPlayers())if(Math.abs(u.x-a.x)<1.5&&u.y<.5)this.damagePlayer(false,u);if(a.age>=3.3)b.acidPatch=null;}
   }
   b.cd-=dt;if(b.cd<.65&&b.cd>0)b.telegraph=true;
   if(b.cd<=0&&!p.dead){b.telegraph=false;b.attack++;const alive=b.targets.filter(q=>q.hp>0),q=alive[b.attack%alive.length],o=[q.x,q.y,q.z],aim=[p.x,p.y+(this.stage.mode==='depth'?1.35:(p.duck?.4:.95)),p.z];
@@ -307,7 +303,7 @@ class CampaignGame{
   }
   if(b.beam>0){b.beam-=dt;if(b.beam<.44&&!b.beamFired){b.beamFired=true;this.sound('L');}if(b.beamFired&&b.beam>0)for(const a of this.livingPlayers()){const low=a.y+.12,hi=a.y+(a.duck?.60:1.65);if(b.beamY+.14>low&&b.beamY-.14<hi)this.damagePlayer(false,a);}}
  }
- clearStage(){if(this.mode!=='playing')return;this.mode=this.stageIndex===7?'won':'clear';this.history.push({stage:this.stageIndex+1,time:+this.t.toFixed(2),score:this.score});this.log('stage-clear');this.announce(this.stageIndex===7?'MISSION COMPLETE / 岛屿已解放':'STAGE CLEAR / 区域已夺回',9);this.sound('win');if(!this.practice){if(this.stageIndex<7)this.callbacks.save?.({...this.rewardedCarry(),stage:this.stageIndex+1});else this.callbacks.complete?.();}}
+ clearStage(){if(this.mode!=='playing')return;this.mode=this.stageIndex===7?'won':'clear';this.history.push({stage:this.stageIndex+1,time:+this.t.toFixed(2),score:this.score});this.log('stage-clear');this.announce(t(this.stageIndex===7?'missionComplete':'stageClear'),9);this.sound('win');if(!this.practice){if(this.stageIndex<7)this.callbacks.save?.({...this.rewardedCarry(),stage:this.stageIndex+1});else this.callbacks.complete?.();}}
  updateDepth(dt,controls){
   if(this.boss?.active)return;
   const active=this.livingPlayers(),p=this.targetPlayer(0);this.roomTime+=dt;
@@ -467,7 +463,7 @@ class CampaignGame{
    else if(!dep){const lo=Math.min(...active.map(a=>a.x)),maxSeparation=Math.min(19,2*(this.cameraHalfWidth||14)-4);for(const p of active)if(p.x>lo+maxSeparation){p.x=lo+maxSeparation;p.vx=0;}}
   }
   for(const cp of this.stage.checkpoints)if((vertical?progress>=cp.y:progress>=cp.x+.3)&&(vertical?this.checkpoint.y<cp.y:this.checkpoint.x<cp.x)){
-   this.checkpoint={...cp,z:0};for(const p of active){if(this.difficulty==='arcade')p.hp=p.maxHp;p.grenades=Math.min(3,p.grenades+1);}this.announce('RELAY ACTIVE / 复活点已激活',2);this.log('checkpoint',cp);
+   this.checkpoint={...cp,z:0};for(const p of active){if(this.difficulty==='arcade')p.hp=p.maxHp;p.grenades=Math.min(3,p.grenades+1);}this.announce(t('relayActive'),2);this.log('checkpoint',cp);
   }
   // The boss arena never starts with the other survivor left behind the lock.
   if(!dep&&!this.boss?.active&&active.length&&active.every(p=>vertical?p.y>=53.9:p.x>this.stage.length-18))this.activateBoss();

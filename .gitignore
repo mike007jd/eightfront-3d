@@ -19,3 +19,6 @@ Thumbs.db
 # Secrets / local env
 .env
 .env.*
+
+# Playwright MCP output
+.playwright-mcp/

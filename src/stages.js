@@ -1,14 +1,14 @@
 /* Original NES campaign order. Layouts, timings and assets are newly authored for this fan game,
    not extracted NES maps, ROM data or commercial assets. */
 const STAGE_META=[
- {name:'JUNGLE',cn:'丛林突入',mode:'side',subtitle:'Break the wall. Find the entrance.',boss:'SUPER WALL',length:286,theme:{fog:[.23,.43,.44],fogDensity:.018,skyLow:[.47,.68,.67],skyHigh:[.04,.21,.49],lightDir:[-.45,.92,.62],key:[1.38,1.26,.95],hemiLow:[.10,.18,.18],hemiHigh:[.42,.58,.62],rim:[.48,.55,.34]},accent:'#bce58b'},
- {name:'BASE 1',cn:'第一基地',mode:'depth',subtitle:'Destroy the sensors. Advance through the barrier.',boss:'OCULAR DEFENSE',rooms:5,theme:{fog:[.035,.10,.15],fogDensity:.010,skyLow:[.027,.05,.065],skyHigh:[.008,.025,.045],indoor:1,lightDir:[-.25,.85,.42],key:[.75,1.15,1.30],hemiLow:[.04,.08,.10],hemiHigh:[.18,.33,.42],rim:[.18,.58,.68]},accent:'#77e8ef'},
- {name:'WATERFALL',cn:'瀑布攀登',mode:'vertical',subtitle:'Climb the ravine. Watch for falling boulders.',boss:'WATERFALL GUARDIAN',length:60,theme:{fog:[.27,.48,.52],fogDensity:.020,skyLow:[.49,.76,.79],skyHigh:[.055,.26,.48],lightDir:[-.55,.95,.40],key:[1.25,1.35,1.18],hemiLow:[.10,.22,.22],hemiHigh:[.42,.68,.72],rim:[.38,.70,.68]},accent:'#89e4ed'},
- {name:'BASE 2',cn:'第二基地',mode:'depth',subtitle:'Breach the security grid. Split the illusion.',boss:'ILLUSION CORE',rooms:8,theme:{fog:[.075,.055,.13],fogDensity:.009,skyLow:[.06,.035,.10],skyHigh:[.018,.018,.045],indoor:1,lightDir:[.35,.75,.25],key:[1.05,.86,1.42],hemiLow:[.07,.04,.12],hemiHigh:[.32,.25,.50],rim:[.72,.48,1.0]},accent:'#baadff'},
- {name:'SNOW FIELD',cn:'雪原突破',mode:'side',subtitle:'Cross the frozen front. Bring down the carrier.',boss:'ARMORED UFO',length:210,theme:{fog:[.43,.60,.74],fogDensity:.014,skyLow:[.67,.80,.86],skyHigh:[.12,.23,.41],lightDir:[-.52,.96,.22],key:[1.35,1.28,1.18],hemiLow:[.18,.26,.33],hemiHigh:[.66,.78,.88],rim:[.70,.90,1.0]},accent:'#d7efff'},
- {name:'ENERGY ZONE',cn:'能源地带',mode:'side',subtitle:'Read the flame cycle. Shut down the reactor.',boss:'GIANT SOLDIER',length:190,theme:{fog:[.12,.075,.09],fogDensity:.012,skyLow:[.22,.10,.10],skyHigh:[.028,.025,.045],indoor:.85,lightDir:[-.38,.78,.58],key:[1.48,.78,.42],hemiLow:[.10,.055,.07],hemiHigh:[.40,.24,.20],rim:[1.0,.42,.20]},accent:'#ffbd78'},
- {name:'HANGAR',cn:'机库压制',mode:'side',subtitle:'Dodge the presses. Break the armored gate.',boss:'ARMORED GATE',length:208,theme:{fog:[.10,.16,.19],fogDensity:.010,skyLow:[.16,.25,.29],skyHigh:[.035,.075,.105],indoor:1,lightDir:[-.20,.82,.46],key:[.92,1.16,1.22],hemiLow:[.05,.10,.12],hemiHigh:[.30,.46,.52],rim:[.42,.80,.90]},accent:'#a7dce1'},
- {name:"ALIEN'S LAIR",cn:'异形巢穴',mode:'side',subtitle:'Destroy the brood. Finish the heart.',boss:'ALIEN HEART',length:184,theme:{fog:[.12,.055,.13],fogDensity:.013,skyLow:[.20,.065,.16],skyHigh:[.035,.012,.045],indoor:1,lightDir:[.28,.72,.42],key:[1.15,.48,.78],hemiLow:[.06,.025,.08],hemiHigh:[.34,.16,.30],rim:[1.0,.34,.62]},accent:'#f7a1cb'}
+ {name:'JUNGLE',mode:'side',subtitle:'Break the wall. Find the entrance.',boss:'SUPER WALL',length:286,theme:{fog:[.23,.43,.44],fogDensity:.018,skyLow:[.47,.68,.67],skyHigh:[.04,.21,.49],lightDir:[-.45,.92,.62],key:[1.38,1.26,.95],hemiLow:[.10,.18,.18],hemiHigh:[.42,.58,.62],rim:[.48,.55,.34]},accent:'#bce58b'},
+ {name:'BASE 1',mode:'depth',subtitle:'Destroy the sensors. Advance through the barrier.',boss:'OCULAR DEFENSE',rooms:5,theme:{fog:[.035,.10,.15],fogDensity:.010,skyLow:[.027,.05,.065],skyHigh:[.008,.025,.045],indoor:1,lightDir:[-.25,.85,.42],key:[.75,1.15,1.30],hemiLow:[.04,.08,.10],hemiHigh:[.18,.33,.42],rim:[.18,.58,.68]},accent:'#77e8ef'},
+ {name:'WATERFALL',mode:'vertical',subtitle:'Climb the ravine. Watch for falling boulders.',boss:'WATERFALL GUARDIAN',length:60,theme:{fog:[.27,.48,.52],fogDensity:.020,skyLow:[.49,.76,.79],skyHigh:[.055,.26,.48],lightDir:[-.55,.95,.40],key:[1.25,1.35,1.18],hemiLow:[.10,.22,.22],hemiHigh:[.42,.68,.72],rim:[.38,.70,.68]},accent:'#89e4ed'},
+ {name:'BASE 2',mode:'depth',subtitle:'Breach the security grid. Split the illusion.',boss:'ILLUSION CORE',rooms:8,theme:{fog:[.075,.055,.13],fogDensity:.009,skyLow:[.06,.035,.10],skyHigh:[.018,.018,.045],indoor:1,lightDir:[.35,.75,.25],key:[1.05,.86,1.42],hemiLow:[.07,.04,.12],hemiHigh:[.32,.25,.50],rim:[.72,.48,1.0]},accent:'#baadff'},
+ {name:'SNOW FIELD',mode:'side',subtitle:'Cross the frozen front. Bring down the carrier.',boss:'ARMORED UFO',length:210,theme:{fog:[.43,.60,.74],fogDensity:.014,skyLow:[.67,.80,.86],skyHigh:[.12,.23,.41],lightDir:[-.52,.96,.22],key:[1.35,1.28,1.18],hemiLow:[.18,.26,.33],hemiHigh:[.66,.78,.88],rim:[.70,.90,1.0]},accent:'#d7efff'},
+ {name:'ENERGY ZONE',mode:'side',subtitle:'Read the flame cycle. Shut down the reactor.',boss:'GIANT SOLDIER',length:190,theme:{fog:[.12,.075,.09],fogDensity:.012,skyLow:[.22,.10,.10],skyHigh:[.028,.025,.045],indoor:.85,lightDir:[-.38,.78,.58],key:[1.48,.78,.42],hemiLow:[.10,.055,.07],hemiHigh:[.40,.24,.20],rim:[1.0,.42,.20]},accent:'#ffbd78'},
+ {name:'HANGAR',mode:'side',subtitle:'Dodge the presses. Break the armored gate.',boss:'ARMORED GATE',length:208,theme:{fog:[.10,.16,.19],fogDensity:.010,skyLow:[.16,.25,.29],skyHigh:[.035,.075,.105],indoor:1,lightDir:[-.20,.82,.46],key:[.92,1.16,1.22],hemiLow:[.05,.10,.12],hemiHigh:[.30,.46,.52],rim:[.42,.80,.90]},accent:'#a7dce1'},
+ {name:"ALIEN'S LAIR",mode:'side',subtitle:'Destroy the brood. Finish the heart.',boss:'ALIEN HEART',length:184,theme:{fog:[.12,.055,.13],fogDensity:.013,skyLow:[.20,.065,.16],skyHigh:[.035,.012,.045],indoor:1,lightDir:[.28,.72,.42],key:[1.15,.48,.78],hemiLow:[.06,.025,.08],hemiHigh:[.34,.16,.30],rim:[1.0,.34,.62]},accent:'#f7a1cb'}
 ];
 
 // RC6/RC7 grade values operate in linear HDR before the single display transform.
@@ -32,10 +32,10 @@ Object.assign(STAGE_META[7].theme,{key:[.90,.77,.83],hemiLow:[.055,.032,.060],he
 // [x, y, hp, radius, armor]. Turrets are optional; the sensor(s) alone open the exit.
 const BASE_ROOMS = {
   1: [
-    { sensors:[[0,1.5,6]], turrets:[], patrol:3.5, carrier:'M', intro:'横移对齐 · 松开下键站立射击' },
+    { sensors:[[0,1.5,6]], turrets:[], patrol:3.5, carrier:'M' },
     { sensors:[[-4,1.5,7]], turrets:[[4,1.5]], patrol:3.5, carrier:'M' },
-    { sensors:[[0,.6,7]], turrets:[[-4,1.5],[4,1.5]], patrol:4.0, grenadiers:true, intro:'低处目标 · 趴下射击' },
-    { sensors:[[0,1.5,8]], turrets:[[0,3.8]], patrol:4.2, rollers:[-4,0,4], carrier:'M', intro:'滚轮贴地 · 趴射击毁或跳过' },
+    { sensors:[[0,.6,7]], turrets:[[-4,1.5],[4,1.5]], patrol:4.0, grenadiers:true },
+    { sensors:[[0,1.5,8]], turrets:[[0,3.8]], patrol:4.2, rollers:[-4,0,4], carrier:'M' },
     { sensors:[[0,1.6,16,1.0]], turrets:[[-4,1.5],[4,1.5],[0,4.2]], patrol:3.6, grenadiers:true, carrier:'F' }
   ],
   3: [
@@ -45,7 +45,7 @@ const BASE_ROOMS = {
     { sensors:[[-3,.6,6],[3,.6,6]], turrets:[[0,3.2]], patrol:3.8, grenadiers:true },
     { sensors:[[-4,1.5,6,.62,3],[4,1.5,6,.62,3]], turrets:[[0,1.5]], patrol:3.6 },
     { sensors:[[0,1.5,8,.62,3]], turrets:[], rollers:[-4,0,4], patrol:4, carrier:'S' },
-    { sensors:[[0,3.2,6]], turrets:[[0,1.5]], patrol:4.0, carrier:'F', intro:'高处目标 · 跳起射击' },
+    { sensors:[[0,3.2,6]], turrets:[[0,1.5]], patrol:4.0, carrier:'F' },
     { sensors:[[0,1.6,18,1,4]], turrets:[[-4,1.5],[4,1.5],[0,4.2]], patrol:3.8, grenadiers:true, carrier:'M' }
   ]
 };

@@ -12,20 +12,20 @@ class CombatGuideView {
   return `<svg class="cue-icon" viewBox="0 0 28 28" aria-hidden="true"><path d="${paths[key]||paths.fire}"/></svg>`;
  }
  words(a){const id=a.owner,bind=k=>this.binding(k,id),g=this.game;
-  const firing=g.inputMode==='retro'&&['R','S','F'].includes(g.players[id-1]?.weapon)?'点按':'按住';
-  const m={alignLeft:[bind('left'),'向左对齐'],alignRight:[bind('right'),'向右对齐'],prone:[bind('down')+' + '+bind('fire'),'趴下射击'],stand:['松开 '+bind('down'),'恢复站射'],jump:[bind('jump')+' + '+bind('fire'),'跳起射击'],jumpRelease:['松开 '+bind('down'),'再跳起射击'],stop:['松开左右移动','停稳后趴下'],releaseLock:['松开 '+bind('lock'),'再趴下射击'],armor:[bind('fire'),'装甲正在阻挡 · 继续射击'],fire:[bind('fire'),firing+'射击'],advance:[bind('up'),'电网已解除 · 前进'],sealed:['','暂时封闭 · 先躲避'],dodgeRush:[bind('jump'),'起跳躲避冲撞'],dodgeLeap:['','移开落点 · 躲避冲击'],prerequisite:['','先破坏保护部件'],barrier:['','先击毁橙色核心']};
+  const firing=t(g.inputMode==='retro'&&['R','S','F'].includes(g.players[id-1]?.weapon)?'tap':'hold'),c=t('cue');
+  const m={alignLeft:[bind('left'),c.alignLeft],alignRight:[bind('right'),c.alignRight],prone:[bind('down')+' + '+bind('fire'),c.prone],stand:[t('release',bind('down')),c.stand],jump:[bind('jump')+' + '+bind('fire'),c.jump],jumpRelease:[t('release',bind('down')),c.jumpRelease],stop:[t('releaseMove'),c.stop],releaseLock:[t('release',bind('lock')),c.releaseLock],armor:[bind('fire'),c.armor],fire:[bind('fire'),t('fireCue',firing)],advance:[bind('up'),c.advance],sealed:['',c.sealed],dodgeRush:[bind('jump'),c.dodgeRush],dodgeLeap:['',c.dodgeLeap],prerequisite:['',c.prerequisite],barrier:['',c.barrier]};
   const [key,text]=m[a.code]||['',''];return{key,text};
  }
  projection(x,y,z){return this.renderer.project(x,y,z);}
  render(){const g=this.game,guide=this.guide;guide.level=this.level();guide.context(g);
   if(this.viewStage!==g.stage||this.viewRoom!==g.room||g.t<this.viewTime){this.lastSpeech='';this.candidateSpeech='';this.speechAt=-Infinity;this.candidateAt=g.t;document.getElementById('guideAnnounce').textContent='';}
   this.viewStage=g.stage;this.viewRoom=g.room;this.viewTime=g.t;
-  const objective=guide.objective(g);for(const id of ['pauseObjective','helpObjective']){const e=document.getElementById(id);if(e){const s=`<small>当前目标</small><strong>${objective.title}</strong><p>${objective.detail}</p>`;this.html(e,s);}}
+  const objective=guide.objective(g);for(const id of ['pauseObjective','helpObjective']){const e=document.getElementById(id);if(e){const s=`<small>${t('currentObjective')}</small><strong>${objective.title}</strong><p>${objective.detail}</p>`;this.html(e,s);}}
   for(const e of this.nodes.values())e.hidden=true;
   this.root.hidden=g.mode!=='playing'||!g.player;if(this.root.hidden)return;
   const living=g.players.filter(p=>!p.dead),advice=living.map(p=>guide.advice(g,p)).filter(Boolean),chosen=living.map(p=>guide.choose(g,p)).filter(Boolean);
   const targets=g.boss?.active?g.boss.targets:g.stage.mode==='depth'?g.sensors:[];
-  const feedbackText={damage:'命中',armor:'装甲受损',armorBreak:'装甲击破',destroyed:'已摧毁',sealed:'暂时封闭',prerequisite:'仍受保护'};
+  const feedbackText=t('feedback');
   for(const [index,q] of (targets||[]).entries()){
    const fb=guide.feedback.get(q);if(q.hp<=0&&(!fb||g.t-fb.born>.7))continue;
    const pos=this.projection(q.x,q.y,q.z+.07);if(!pos.visible||pos.x<15||pos.x>innerWidth-15||pos.y<90||pos.y>innerHeight-40)continue;
@@ -47,7 +47,7 @@ class CombatGuideView {
    if(a.essential){if(a.owner!==living[0]?.id)continue;const e=this.node('advance','advance-cue');const w=this.words(a);this.html(e,`${this.icon('advance')}<span>${w.text}</span>${guide.level!=='off'?`<kbd>${w.key}</kbd>`:''}`);const at=this.projection(0,.65,-7);this.pos(e,clamp(at.x,140,innerWidth-140),clamp(at.y,155,innerHeight-95));continue;}
    if(!a.target)continue;const pos=this.projection(a.target.x,a.target.y,a.target.z);if(!pos.visible)continue;
    const e=this.node('player'+a.owner,'instruction-cue p'+a.owner);e.dataset.reason=a.code;e.dataset.recovery=String(!!a.recovery);const w=this.words(a);
-   this.html(e,`${this.icon(a.code)}<span class="cue-copy">${g.playerCount===2?`<b class="cue-owner">P${a.owner}${targets.length>1?' · 目标 '+(targets.indexOf(a.target)+1):''}</b>`:''}<strong>${w.text}</strong>${w.key?`<kbd>${w.key}</kbd>`:''}</span>`);
+   this.html(e,`${this.icon(a.code)}<span class="cue-copy">${g.playerCount===2?`<b class="cue-owner">P${a.owner}${targets.length>1?' · '+t('target')+' '+(targets.indexOf(a.target)+1):''}</b>`:''}<strong>${w.text}</strong>${w.key?`<kbd>${w.key}</kbd>`:''}</span>`);
    const width=Math.max(160,e.offsetWidth),height=e.offsetHeight||48;let x=pos.x,y=pos.y-76;
    if(g.boss?.active&&g.stage.mode!=='depth'){const p=g.players[a.owner-1],edge=this.projection(a.target.x+(a.target.rx||1),a.target.y,a.target.z);x+=(p.x<a.target.x?-1:1)*(width/2+Math.abs(edge.x-pos.x)+60);y=pos.y-60;}
    if(advice.some(b=>b!==a&&b.target===a.target))x+=(a.owner===1?-1:1)*(width/2+9);
@@ -56,7 +56,7 @@ class CombatGuideView {
    y=Math.max(145+height/2,y);this.pos(e,x,y);boxes.push({x,y,w:width});
   }
   // Discrete spoken state; not hit ticks, health ticks or every-frame coordinates.
-  const spoken=advice.map(a=>`${g.playerCount===2?'玩家'+a.owner+'，':''}${this.words(a).text} ${this.words(a).key}`).join('。');
+  const spoken=advice.map(a=>`${g.playerCount===2?t('spokenPlayer',a.owner):''}${this.words(a).text} ${this.words(a).key}`).join(t('spokenSep'));
   if(!spoken&&g.t-this.speechAt>6){this.lastSpeech='';document.getElementById('guideAnnounce').textContent='';}
   if(spoken!==this.candidateSpeech){this.candidateSpeech=spoken;this.candidateAt=g.t;}
   if(spoken&&spoken!==this.lastSpeech&&g.t-this.candidateAt>.65&&g.t-this.speechAt>2.5){document.getElementById('guideAnnounce').textContent=spoken;this.lastSpeech=spoken;this.speechAt=g.t;}

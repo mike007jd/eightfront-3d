@@ -5,7 +5,7 @@ Copyright 2026 mike007jd
 
 Licensed under the Apache License, Version 2.0 (see LICENSE). Redistributions must keep this NOTICE file.
 
-Unofficial fan tribute, not an official Konami release. The project contains no original ROM, commercial sprite sheets, extracted commercial character models, music recordings or font files. Geometry, rigs, IK, materials, shaders, VFX, guidance UI and cue sounds are procedural and authored in `src/`; commando geometry, rig and IK live in `src/characters.js` and incorporate no MakeHuman asset. Chapter-preview JPEGs embedded as data URIs in `src/stage-previews.js` are crops of this project's own rendered frames, used as navigation thumbnails.
+Unofficial fan tribute, not an official Konami release. The project contains no original ROM, commercial sprite sheets, extracted commercial character models, music recordings or font files. Geometry, rigs, IK, materials, shaders, VFX, guidance UI and cue sounds are procedural and authored in `src/`; commando geometry, rig and IK live in `src/characters.js` and incorporate no MakeHuman asset. Chapter-preview JPEGs embedded as data URIs in `src/stage-previews.js` are crops of this project's own rendered frames, used as navigation thumbnails. The JPEGs in `docs/` are screenshots of this project's own builds, used in the README.
 
 ## Bundled renderer
 

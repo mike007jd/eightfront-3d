@@ -128,24 +128,24 @@ class CombatGuide {
   return null;
  }
  bossStatus(g){
-  const b=g.boss;if(!b?.active)return null;if(b.dead)return{code:'destroyed',text:'目标已摧毁',goal:'区域已肃清'};
+  const b=g.boss;if(!b?.active)return null;if(b.dead)return{code:'destroyed',text:t('bossDestroyed'),goal:t('resultClear')};
   const alive=b.targets.filter(q=>q.hp>0),parts=alive.filter(q=>q.kind!=='core'),open=alive.filter(q=>g.targetOpen(q)),core=open.some(q=>q.kind==='core');
-  const names={1:'锁点',2:'双臂',4:'引擎',6:'门锁',7:'孢囊'};
+  const names=t('bossParts');
   if(b.type===5){const c=b.t%6.4,state=c<1.1?'windup':c<2.4?'rush':c<3.1?'windup':c<4.7?'leap':'recover';
-   const text={windup:'蓄力 · 核心可攻击',rush:'冲撞 · 起跳躲避',leap:'跃击 · 避开落点',recover:'恢复 · 攻击窗口'}[state];return{code:core?'open':'sealed',text,goal:text};}
-  if(core)return{code:'open',text:b.type===3?'攻击开启的核心':'核心暴露 · 可以攻击',goal:b.type===0?'可直接攻击中央核心；炮台可选':b.type===3?`击毁移动核心 · 剩余 ${alive.length}`:'攻击暴露的核心'};
-  if(parts.length){const goal=`击破${names[b.type]||'部件'} · 剩余 ${parts.length}`;return{code:'prerequisite',text:goal+(open.length?'':' · 等待开启'),goal};}
-  return{code:'sealed',text:'核心暂闭 · 躲避攻击',goal:b.type===3?`等待核心开启 · 剩余 ${alive.length}`:'部件已清除；等待核心再次开启'};
+   const text=t('robot')[state];return{code:core?'open':'sealed',text,goal:text};}
+  if(core)return{code:'open',text:b.type===3?t('attackOpenCore'):t('coreOpenText'),goal:b.type===0?t('goalCentral'):b.type===3?t('goalMoving',alive.length):t('goalOpenCore')};
+  if(parts.length){const goal=t('goalParts',names[b.type]||t('bossPartsDefault'),parts.length);return{code:'prerequisite',text:goal+(open.length?'':t('waitOpen')),goal};}
+  return{code:'sealed',text:t('coreSealed'),goal:b.type===3?t('goalWaitMoving',alive.length):t('goalWaitCore')};
  }
  objective(g){
-  if(!g.player||g.mode==='menu')return{title:'随时可以查看当前目标',detail:'战斗中按 ESC 暂停，查看目标与操作。'};
-  if(g.boss?.active){const b=this.bossStatus(g);return{title:b.goal,detail:'闭合标记表示暂不可受伤；开放框表示可攻击。'};}
+  if(!g.player||g.mode==='menu')return{title:t('objMenuTitle'),detail:t('objMenuDetail')};
+  if(g.boss?.active){const b=this.bossStatus(g);return{title:b.goal,detail:t('objBossDetail')};}
   if(g.stage.mode==='depth'){
-   if(!g.barrier)return{title:g.depthExit?.moving?'正在进入下一室':'电网已解除 · 向前进入下一室',detail:'任一存活玩家向前即可带领全队前进。'};
+   if(!g.barrier)return{title:g.depthExit?.moving?t('objEntering'):t('objAdvance'),detail:t('objAdvanceDetail')};
    const remain=g.sensors.filter(q=>q.hp>0),low=remain.every(q=>this.mechanic(q)==='prone'),high=remain.some(q=>this.mechanic(q)==='jump'),armor=remain.some(q=>q.armor>0);
-   return{title:`击毁${low?'低位':high?'高位':armor?'装甲':''}核心 · 剩余 ${remain.length} / ${g.sensors.length}`,detail:low?'横移对齐，松开移动与瞄准锁定，再趴下射击。炮台可选。':high?'横移对齐，松开下键，跳起射击。炮台可选。':armor?'横移对齐，站射击碎装甲，再破坏核心。炮台可选。':'横移对齐，松开下键恢复站射。炮台可选。'};
+   return{title:t('objCores',t('coreKinds')[low?'low':high?'high':armor?'armor':''],remain.length,g.sensors.length),detail:t(low?'objLow':high?'objHigh':armor?'objArmor':'objStand')};
   }
-  return{title:g.stage.mode==='vertical'?'向上攀登，抵达守卫所在平台':'向右突破，抵达关底',detail:'优先躲避危险；并非所有普通敌人都必须消灭。'};
+  return{title:t(g.stage.mode==='vertical'?'objClimb':'objRight'),detail:t('objSideDetail')};
  }
  // Actual centre-ray endpoint, starting at the same muzzle as projectiles. It is a
  // prediction for one straight centre ray, not homing aim or a guarantee for spread.
