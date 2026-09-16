@@ -22,3 +22,5 @@ Thumbs.db
 
 # Playwright MCP output
 .playwright-mcp/
+.vercel
+.env*
