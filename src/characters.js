@@ -108,7 +108,7 @@ function createCommandoSystem(T, shared){
  vec3 c=aColor;if(aRegion>.5&&aRegion<1.5)c=uBand;else if(aRegion>1.5&&aRegion<2.5)c=uPants;else if(aRegion>2.5)c=uVest;
  vColor=vec4(c,0.);vParams=vec4(aSurface,uInv,1.,1.);vUV=uv;vShadow=uLight*w;gl_Position=uVP*w;}`;
  function makeActor(index){const bones=bind.map(p=>{const b=new T.Bone();b.position.fromArray(p);return b;}),root=new T.Group();bones.forEach(b=>root.add(b));root.updateMatrixWorld(true);const skeleton=new T.Skeleton(bones);skeleton.calculateInverses();
-  const u={...shared,uBones:{value:Array.from({length:18},()=>new T.Matrix4())},uModel:{value:new T.Matrix4()},uInv:{value:0},uBand:{value:v3(linear(index%2?'#f5a94a':'#42c3e5'))},uPants:{value:v3(linear(index%2?'#343f52':'#364c59'))},uVest:{value:v3(linear(index%2?'#8c7964':'#78857a'))}};
+  const u={...shared,uBones:{value:Array.from({length:18},()=>new T.Matrix4())},uModel:{value:new T.Matrix4()},uInv:{value:0},uBand:{value:v3(linear(index%2?'#e8432c':'#42c3e5'))},uPants:{value:v3(linear(index%2?'#4a2d33':'#364c59'))},uVest:{value:v3(linear(index%2?'#9b7050':'#78857a'))}};
   const opts={vertexShader:vertex,glslVersion:T.GLSL3,uniforms:u,side:T.FrontSide,toneMapped:false};const mat=new T.RawShaderMaterial({...opts,fragmentShader:Shaders.fragment.replace(/^#version[^\n]+\n/,'')}),depth=new T.RawShaderMaterial({...opts,fragmentShader:Shaders.depth.replace(/^#version[^\n]+\n/,'')});
   const mesh=new T.SkinnedMesh(geometry,mat);mesh.bind(skeleton,new T.Matrix4());mesh.frustumCulled=false;mesh.visible=false;mesh.name='Commando P'+(index+1);scene.add(mesh);return{mesh,bones,root,skeleton,u,mat,depth};
  }
